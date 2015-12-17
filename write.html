@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="gb2312" />
+    <meta name="author" content="Keneks">
+    <title>JavaScript 保存文本文件到本地</title>
+    <script type="text/javascript">
+
+        window.onload = function() {
+            var save = document.getElementById("save");
+            // IE
+            if(/msie/i.test(navigator.userAgent)) {
+                save.onclick = function() {
+                    var path = prompt("输入保存路径和文件名", "C:\\test.csv");
+                    var content = document.getElementById("content").value;
+                    content = content.replace(/\n/g, "\r\n");
+                    var fso = new ActiveXObject("Scripting.FileSystemObject");
+                    var s = fso.CreateTextFile(path, true);
+                    s.WriteLine(content);
+                    s.Close();
+                };
+            }
+            else {
+                save.onclick = function() {
+                    var content = document.getElementById("content").value;
+                    var sFileName = document.getElementById("fileName").value;
+                    var blob = new Blob([content]);
+                    if(sFileName.trim() !== ""){
+                        save.download = sFileName;
+                    }else{
+                        save.download = "test.txt";
+                    }
+                    save.href = URL.createObjectURL(blob);
+
+                };
+            }
+        };
+
+
+
+
+    </script>
+</head>
+<body>
+<textarea cols="50" rows="5" id="content">测试文字</textarea>
+<br /><input id="fileName">
+<a href="#" id="save">保存文件</a>
+</body>
+</html>
